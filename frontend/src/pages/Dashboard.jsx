@@ -1,13 +1,19 @@
 import { useEffect, useState } from "react";
 import api from "../api/axios";
 import HabitCard from "../components/HabitCard";
+import HabitForm from "./HabitForm";
+import toast from "react-hot-toast";
 
 export default function Dashboard() {
   const [habits, setHabits] = useState([]);
 
   const fetchHabits = async () => {
-    const { data } = await api.get("/habits");
-    setHabits(data);
+    try {
+      const { data } = await api.get("/habits");
+      setHabits(data);
+    } catch {
+      toast.error("Failed to load habits");
+    }
   };
 
   useEffect(() => {
@@ -17,20 +23,47 @@ export default function Dashboard() {
   const checkin = async (id) => {
     try {
       await api.post(`/habits/${id}/checkin`);
+      toast.success("Habit checked in 🎉");
       fetchHabits();
-    } catch {
-      alert("Already checked in!");
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Already checked in!");
     }
   };
 
+  const handleHabitCreated = (newHabit) => {
+    setHabits((prev) => [...prev, newHabit]);
+  };
+
+  const handleHabitUpdated = (updatedHabit) => {
+  setHabits((prev) =>
+    prev.map((habit) =>
+      habit._id === updatedHabit._id
+        ? { ...habit, ...updatedHabit }  
+        : habit
+    )
+  );
+};
+
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">My Habits</h1>
-      <div className="grid gap-4">
-        {habits.map((habit) => (
-          <HabitCard key={habit._id} habit={habit} onCheckin={() => checkin(habit._id)} />
-        ))}
-      </div>
+    <div className="p-6 max-w-5xl mx-auto">
+      <h1 className="text-3xl font-bold mb-6 text-[#c9184a]">My Habits</h1>
+
+      <HabitForm onHabitCreated={handleHabitCreated} />
+
+      {habits.length === 0 ? (
+        <p className="text-gray-600">No habits yet. Start by creating one!</p>
+      ) : (
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {habits.map((habit) => (
+            <HabitCard
+              key={habit._id}
+  habit={habit}
+  onCheckin={() => checkin(habit._id)}
+  onUpdate={handleHabitUpdated}  
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

@@ -3,8 +3,73 @@ const Checkin = require("../models/Checkin");
 
 exports.getHabits = async (req, res) => {
   const habits = await Habit.find({ user: req.user._id });
-  res.json(habits);
+
+  const enriched = await Promise.all(
+    habits.map(async (habit) => {
+      const checkins = await Checkin.find({
+        habit: habit._id,
+        user: req.user._id,
+      }).sort({ date: -1 });
+
+      let streak = 0;
+      let lastCheckin = null;
+
+      if (checkins.length > 0) {
+        lastCheckin = checkins[0].date;
+
+        let currentStreak = 1;
+        for (let i = 1; i < checkins.length; i++) {
+          const diff =
+            (checkins[i - 1].date - checkins[i].date) / (1000 * 60 * 60 * 24);
+          if (diff <= 1.5) currentStreak++;
+          else break;
+        }
+        streak = currentStreak;
+      }
+
+      const startOfWeek = new Date();
+      startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay()); 
+
+      const thisWeekCheckins = checkins.filter(
+        (c) => new Date(c.date) >= startOfWeek
+      ).length;
+
+      let targetPerWeek = 7;
+      if (habit.frequency === "weekly") targetPerWeek = 1;
+      else if (habit.frequency === "monthly") targetPerWeek = 4;
+
+      const progress = Math.min(
+        Math.round((thisWeekCheckins / targetPerWeek) * 100),
+        100
+      );
+
+      const today = new Date();
+      const last14Days = [...Array(15)].map((_, i) => {
+        const d = new Date(today);
+        d.setDate(today.getDate() - (13 - i)); 
+        const dateStr = d.toISOString().split("T")[0];
+
+        const checked = checkins.some(
+          (c) => new Date(c.date).toISOString().split("T")[0] === dateStr
+        );
+
+        return { date: dateStr, checked };
+      });
+
+      return {
+        ...habit.toObject(),
+        streak,
+        lastCheckin,
+        progress,
+        calendar: last14Days,
+      };
+    })
+  );
+
+  res.json(enriched);
 };
+
+
 
 exports.createHabit = async (req, res) => {
   try {

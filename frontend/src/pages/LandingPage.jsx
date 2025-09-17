@@ -104,9 +104,9 @@ export default function Landing() {
                 $0<span className="text-lg">/mo</span>
               </p>
               <ul className="text-gray-600 space-y-3 mb-6">
-                <li>✔ Track up to 3 habits</li>
-                <li>✔ Basic progress stats</li>
-                <li>✔ Community access</li>
+                <li> Track up to 3 habits</li>
+                <li> Basic progress stats</li>
+                <li> Community access</li>
               </ul>
               <button className="mt-auto bg-[#c9184a] text-white font-bold py-3 rounded-lg hover:bg-[#a3133a] transition">
                 Get Started
@@ -122,9 +122,9 @@ export default function Landing() {
                 $9<span className="text-lg">/mo</span>
               </p>
               <ul className="text-gray-600 space-y-3 mb-6">
-                <li>✔ Unlimited habits</li>
-                <li>✔ Advanced streak tracking</li>
-                <li>✔ Friends activity feed</li>
+                <li> Unlimited habits</li>
+                <li> Advanced streak tracking</li>
+                <li> Friends activity feed</li>
               </ul>
               <button className="mt-auto bg-[#c9184a] text-white font-bold py-3 rounded-lg hover:bg-[#a3133a] transition">
                 Start Pro
@@ -142,10 +142,9 @@ export default function Landing() {
                 $19<span className="text-lg">/mo</span>
               </p>
               <ul className="text-gray-600 space-y-3 mb-6">
-                <li>✔ All Pro features</li>
-                <li>✔ Team challenges</li>
-                <li>✔ Personalized reminders</li>
-                <li>✔ Priority support</li>
+                <li> All Pro features</li>
+                <li> Personalized reminders</li>
+                <li> Priority support</li>
               </ul>
               <button className="mt-auto bg-[#c9184a] text-white font-bold py-3 rounded-lg hover:bg-[#a3133a] transition">
                 Go Premium

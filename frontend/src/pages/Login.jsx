@@ -1,11 +1,12 @@
 import { useState } from "react";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { toast } from "react-hot-toast";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [formData, setFormData] = useState({ email: "", password: "" });
-  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -13,21 +14,22 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", formData);
-      localStorage.setItem("token", res.data.token);
+      await login(formData.email, formData.password);
+      toast.success("Logged in successfully");
       navigate("/dashboard");
     } catch (err) {
-      setError(err.response?.data?.message || "Login failed");
+      toast.error(err.response?.data?.message || "Login failed");
     }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-white">
       <div className="bg-[#c9184a] px-8 py-14 rounded-2xl shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold text-white text-center ">Login</h2>
-        <p className="text-white text-center mb-8">Welcome back! Please enter your details.</p>
+        <h2 className="text-2xl font-bold text-white text-center">Login</h2>
+        <p className="text-white text-center mb-8">
+          Welcome back! Please enter your details.
+        </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
@@ -39,7 +41,6 @@ const Login = () => {
             className="w-full px-4 py-2 rounded bg-gray-100 focus:outline-none"
             required
           />
-
           <input
             type="password"
             name="password"
@@ -49,9 +50,6 @@ const Login = () => {
             className="w-full px-4 py-2 rounded bg-gray-100 focus:outline-none"
             required
           />
-
-          {error && <p className="text-sm text-white text-center">{error}</p>}
-
           <button
             type="submit"
             className="w-full bg-white text-[#c9184a] font-bold py-3 rounded hover:bg-gray-100 transition"
