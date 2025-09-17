@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import { useAuth } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import toast from "react-hot-toast";
