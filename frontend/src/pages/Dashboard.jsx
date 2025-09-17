@@ -35,13 +35,21 @@ export default function Dashboard() {
   };
 
   const handleHabitUpdated = (updatedHabit) => {
-  setHabits((prev) =>
-    prev.map((habit) =>
-      habit._id === updatedHabit._id
-        ? { ...habit, ...updatedHabit }  
-        : habit
-    )
-  );
+    setHabits((prev) =>
+      prev.map((habit) =>
+        habit._id === updatedHabit._id ? { ...habit, ...updatedHabit } : habit
+      )
+    );
+  };
+
+  const handleHabitDelete = async (habitId) => {
+  try {
+    await api.delete(`/habits/${habitId}`);
+    toast.success("Habit deleted ");
+    setHabits((prev) => prev.filter((habit) => habit._id !== habitId));
+  } catch (err) {
+    toast.error(err.response?.data?.message || "Failed to delete habit ");
+  }
 };
 
   return (
@@ -57,9 +65,10 @@ export default function Dashboard() {
           {habits.map((habit) => (
             <HabitCard
               key={habit._id}
-  habit={habit}
-  onCheckin={() => checkin(habit._id)}
-  onUpdate={handleHabitUpdated}  
+              habit={habit}
+              onCheckin={() => checkin(habit._id)}
+              onUpdate={handleHabitUpdated}
+              onDelete={handleHabitDelete}
             />
           ))}
         </div>

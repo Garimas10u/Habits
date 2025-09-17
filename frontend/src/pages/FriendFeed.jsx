@@ -7,7 +7,6 @@ export default function FriendsFeed() {
   const [search, setSearch] = useState("");
   const [currentUser, setCurrentUser] = useState(null);
 
-  // Fetch current logged-in user
   const fetchCurrentUser = async () => {
     try {
       const { data } = await api.get("/auth/me");
@@ -17,7 +16,6 @@ export default function FriendsFeed() {
     }
   };
 
-  // Fetch all users
   const fetchUsers = async (query = "") => {
     try {
       const { data } = await api.get(`/users/search?q=${query}`);
@@ -59,7 +57,6 @@ export default function FriendsFeed() {
           : [...(prev.friends || []), userId],
       }));
 
-      // Update users array for immediate UI change
       setUsers((prev) =>
         prev.map((u) =>
           u._id === userId ? { ...u, followed: !isFollowing } : u
@@ -70,14 +67,18 @@ export default function FriendsFeed() {
     }
   };
 
-  // Sort users: followed first (by streak descending), then others
+  // Sort users
   const sortedUsers = [...users].sort((a, b) => {
     const aFollowed = currentUser?.friends?.includes(a._id) ? 1 : 0;
     const bFollowed = currentUser?.friends?.includes(b._id) ? 1 : 0;
 
     if (aFollowed && bFollowed) {
-      const aMaxStreak = Math.max(...(a.habits?.map((h) => h.streak || 0) || [0]));
-      const bMaxStreak = Math.max(...(b.habits?.map((h) => h.streak || 0) || [0]));
+      const aMaxStreak = Math.max(
+        ...(a.habits?.map((h) => h.streak || 0) || [0])
+      );
+      const bMaxStreak = Math.max(
+        ...(b.habits?.map((h) => h.streak || 0) || [0])
+      );
       return bMaxStreak - aMaxStreak;
     }
 
@@ -126,7 +127,9 @@ export default function FriendsFeed() {
                           className="text-gray-700 text-sm flex justify-between"
                         >
                           <span>{habit.name}</span>
-                          <span className="font-medium">{habit.streak || 0} 🔥</span>
+                          <span className="font-medium">
+                            {habit.streak || 0} 🔥
+                          </span>
                         </div>
                       ))}
                     </div>

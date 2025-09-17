@@ -9,9 +9,9 @@ exports.searchUsers = async (req, res) => {
       $or: [{ name: new RegExp(q, "i") }, { email: new RegExp(q, "i") }]
     })
       .select("-password")
-      .lean(); // use lean for plain JS objects
+      .lean();
 
-    // Populate habits for each user
+   
     const usersWithHabits = await Promise.all(
       users.map(async (user) => {
         const habits = await Habit.find({ user: user._id }).select("name streak");
@@ -36,7 +36,7 @@ exports.followUser = async (req, res) => {
       { new: true }
     );
 
-    res.json(user); // Return updated user
+    res.json(user); 
   } catch (err) {
     res.status(500).json({ message: "Failed to follow user" });
   }
@@ -50,7 +50,7 @@ exports.unfollowUser = async (req, res) => {
       { new: true }
     );
 
-    res.json(user); // Return updated user
+    res.json(user); 
   } catch (err) {
     res.status(500).json({ message: "Failed to unfollow user" });
   }

@@ -21,7 +21,7 @@ export default function HabitForm({ onHabitCreated }) {
       const { data } = await api.post("/habits", form);
       toast.success("Habit created successfully 🎯");
       setForm({ name: "", frequency: "daily", category: "" });
-      onHabitCreated(data); 
+      onHabitCreated(data);
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to create habit");
     } finally {

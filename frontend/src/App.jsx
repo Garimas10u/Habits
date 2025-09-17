@@ -32,7 +32,7 @@ function AppRoutes() {
           element={user ? <Dashboard /> : <Navigate to="/" />}
         />
         <Route
-          path="/feed"
+          path="/friends"
           element={user ? <FriendsFeed /> : <Navigate to="/" />}
         />
       </Routes>

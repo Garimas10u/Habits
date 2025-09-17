@@ -42,7 +42,9 @@ export default function Landing() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white shadow-lg rounded-2xl p-8 border border-gray-100 hover:shadow-xl transition">
               <div className="w-12 h-12 flex items-center justify-center rounded-full bg-[#c9184a]/10 mx-auto mb-6">
-                <span className="text-[#c9184a] text-2xl"><BarChart /></span>
+                <span className="text-[#c9184a] text-2xl">
+                  <BarChart />
+                </span>
               </div>
               <h3 className="text-xl font-semibold text-[#c9184a] mb-3">
                 Track Progress
@@ -55,7 +57,9 @@ export default function Landing() {
 
             <div className="bg-white shadow-lg rounded-2xl p-8 border border-gray-100 hover:shadow-xl transition">
               <div className="w-12 h-12 flex items-center justify-center rounded-full bg-[#c9184a]/10 mx-auto mb-6">
-                <span className="text-[#c9184a] text-2xl"><Handshake /></span>
+                <span className="text-[#c9184a] text-2xl">
+                  <Handshake />
+                </span>
               </div>
               <h3 className="text-xl font-semibold text-[#c9184a] mb-3">
                 Stay Accountable
@@ -68,7 +72,9 @@ export default function Landing() {
 
             <div className="bg-white shadow-lg rounded-2xl p-8 border border-gray-100 hover:shadow-xl transition">
               <div className="w-12 h-12 flex items-center justify-center rounded-full bg-[#c9184a]/10 mx-auto mb-6">
-                <span className="text-[#c9184a] text-2xl"><Repeat /></span>
+                <span className="text-[#c9184a] text-2xl">
+                  <Repeat />
+                </span>
               </div>
               <h3 className="text-xl font-semibold text-[#c9184a] mb-3">
                 Build Consistency
