@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
   const links = [
@@ -11,8 +12,14 @@ export default function Navbar() {
     { name: "Friends Feed", path: "/friends" },
   ];
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+  }, []);
+
   const handleLogout = () => {
     localStorage.removeItem("token");
+    setIsLoggedIn(false);
     navigate("/login");
   };
 
@@ -35,12 +42,21 @@ export default function Navbar() {
               </Link>
             ))}
 
-            <button
-              onClick={handleLogout}
-              className="ml-4 px-6 py-1 rounded-2xl bg-[#c9184a] text-white hover:bg-[#a3153d] transition"
-            >
-              Logout
-            </button>
+            {isLoggedIn ? (
+              <button
+                onClick={handleLogout}
+                className="ml-4 px-6 py-1 rounded-2xl bg-[#c9184a] text-white hover:bg-[#a3153d] transition"
+              >
+                Logout
+              </button>
+            ) : (
+              <button
+                onClick={() => navigate("/login")}
+                className="ml-4 px-6 py-1 rounded-2xl bg-[#c9184a] text-white hover:bg-[#a3153d] transition"
+              >
+                Login
+              </button>
+            )}
           </div>
 
           <div className="flex items-center md:hidden">
@@ -53,7 +69,7 @@ export default function Navbar() {
           </div>
         </div>
       </div>
-
+      
       {isOpen && (
         <div className="md:hidden bg-white border-t border-gray-200">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
@@ -68,15 +84,27 @@ export default function Navbar() {
               </Link>
             ))}
 
-            <button
-              onClick={() => {
-                handleLogout();
-                setIsOpen(false);
-              }}
-              className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-white bg-[#c9184a] hover:bg-[#a3153d] transition"
-            >
-              Logout
-            </button>
+            {isLoggedIn ? (
+              <button
+                onClick={() => {
+                  handleLogout();
+                  setIsOpen(false);
+                }}
+                className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-white bg-[#c9184a] hover:bg-[#a3153d] transition"
+              >
+                Logout
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  navigate("/login");
+                  setIsOpen(false);
+                }}
+                className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-white bg-[#c9184a] hover:bg-[#a3153d] transition"
+              >
+                Login
+              </button>
+            )}
           </div>
         </div>
       )}
